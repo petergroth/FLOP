@@ -1,0 +1,33 @@
+# Filetypes
+**/*.afdesign
+**/*.pyc
+**/*.png
+**/*.zip
+# Hidden files
+.env
+.DS_store
+**/.DS_store
+.idea
+.idea/
+# Directories
+/data/*
+figures/
+reports/
+/representations/*
+deprecated/
+notebooks/
+**/archived
+**/deprecated
+# Single files
+/needleall.error
+src.egg-info
+# Modules
+graph-part/
+Tranception/
+EVE/*
+!/EVE/utils/
+/EVE/utils/*
+!/EVE/utils/data_utils.py
+!/EVE/EVE/
+/EVE/EVE/*
+!/EVE/EVE/default_model_params.json
