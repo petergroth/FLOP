@@ -5,7 +5,7 @@ from typing import Tuple
 import pandas as pd
 
 from src.data.data_utils import repr_dict
-from src.visualization.visualization_funcs import test_results_barplot
+from src.visualization.visualization_funcs import results_single_dataset
 from src.training.training_utils import summarise_results
 
 
@@ -129,14 +129,8 @@ def main(
         df.to_csv(f"results/{dataset}/{dataset}_summary.csv")
 
     if bar_plot:
-        test_results_barplot(
-            dataset=dataset,
-            embedding_types=embedding_types,
-            metric=metric,
-            save_fig=True,
-            path=path,
-            image_format=image_format,
-        )
+        results_single_dataset(dataset=dataset, embedding_types=embedding_types, metric=metric, save_fig=True,
+                               path=path, image_format=image_format)
 
 
 if __name__ == "__main__":

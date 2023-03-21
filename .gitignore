@@ -11,6 +11,17 @@
 .idea/
 # Directories
 /data/*
+!/data/processed/
+/data/processed/*
+!/data/processed/cm
+!/data/processed/gh114
+!/data/processed/ppat
+/data/processed/cm/*
+/data/processed/gh114/*
+/data/processed/ppat/*
+!/data/processed/cm/cm.csv
+!/data/processed/gh114/gh114.csv
+!/data/processed/ppat/ppat.csv
 figures/
 reports/
 /representations/*

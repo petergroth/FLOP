@@ -32,3 +32,14 @@ python src/visualize_results.py --regressor $REGRESSOR --image_format $IMAGE_FOR
 
 # GENERATE HISTOGRAMS FOR EACH DATASET
 python src/visualization/generate_histograms.py --image_format $IMAGE_FORMAT
+
+# COMBINED PLOTS FOR ABLATION RESULTS
+for ABLATION in "holdout" "random"
+    do
+      python src/visualization/generate_additional_ablation_figures.py \
+      --dataset "" \
+      --metric $METRIC \
+      --image_format $IMAGE_FORMAT \
+      --ablation_method $ABLATION \
+      --all_ablation
+    done

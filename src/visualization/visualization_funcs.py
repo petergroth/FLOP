@@ -162,15 +162,15 @@ def visualize_embedding(dataset: str, embedding_type: str, suffix: Union[str, No
     plt.show()
 
 
-def test_results_barplot(
+def results_single_dataset(
     dataset: str,
     embedding_types: Tuple[str, ...],
     metric: str,
     save_fig: bool = True,
-    path: Union[str, None] = None,
     image_format: str = "png",
     ablation: bool = False,
     ablation_method: str = None,
+    **kwargs,
 ):
     """Visualize results for KNN, linear model, and random forest regressors/classifiers for one dataset.
 
@@ -179,7 +179,6 @@ def test_results_barplot(
         embedding_types: Which representations to include
         metric: Which metric to include
         save_fig: Include to save.
-        path: Include to overwrite default output path.
         image_format: Output file format. PDF for report.
         ablation: If results are from ablation study.
         ablation_method: Specify ablation method.
@@ -210,7 +209,7 @@ def test_results_barplot(
         error_y=f"test_{metric}_sem",
         facet_col="model",
         width=900,
-        height=400,
+        height=350,
         color_discrete_sequence=px.colors.qualitative.G10,
         category_orders={
             "model": ["KNN", "Ridge", "RandomForest", "MLP"]
@@ -218,16 +217,24 @@ def test_results_barplot(
             else ["KNN", "LogReg", "RandomForest", "MLP"],
             "embedding": ["CT", "ESM-1B", "ESM-2", "ESM-IF1", "EVE", "Evoformer (AF2)", "MSA (1-HOT)"],
         },
-        title=f"Dataset: {dataset.upper()}. Metric: {metric}",
+        title=f"Dataset: {dataset.upper()}. Metric: {metric.capitalize()}",
     )
-    fig.update_layout({"yaxis": {"title": f"{metric.capitalize()}", "visible": True, "showticklabels": True}})
     fig["layout"]["xaxis"]["title"]["text"] = ""
     fig["layout"]["xaxis2"]["title"]["text"] = ""
     fig["layout"]["xaxis3"]["title"]["text"] = ""
+    fig["layout"]["xaxis4"]["title"]["text"] = ""
     fig.update_xaxes(showticklabels=False)
+    # Fix axes
     if metric in ["auroc", "spearman", "mcc", "f1"]:
         fig.update_yaxes(range=[0, 1])
-
+    # Updated column headers
+    for i, reg in enumerate(["KNN", "Ridge", "RandomForest", "MLP"]):
+        fig["layout"]["annotations"][i]["text"] = reg
+    # Capitalize legend
+    fig["layout"]["legend"]["title"]["text"] = "Embedding"
+    # Updated y-label
+    fig["layout"]["yaxis"]["title"]["text"] = metric.capitalize() if metric == "spearman" else metric.upper()
+    # Center title
     fig.update_layout(title={"x": 0.5})
 
     if save_fig:
@@ -310,6 +317,13 @@ def all_test_results_barplot(
     fig["layout"]["xaxis"]["title"]["text"] = ""
     fig["layout"]["xaxis2"]["title"]["text"] = ""
     fig["layout"]["xaxis3"]["title"]["text"] = ""
+
+    # Capitalize legend header
+    fig["layout"]["legend"]["title"]["text"] = "Embedding"
+    # Update annotations
+    for i, dat in enumerate(datasets):
+        fig["layout"]["annotations"][i]["text"] = dat.upper()
+
     fig.update_xaxes(showticklabels=False)
     if metric in ["auroc", "spearman", "mcc", "f1"]:
         fig.update_yaxes(range=[0, 1])
@@ -482,3 +496,113 @@ def generate_partition_histograms(image_format: str = "pdf"):
         path = f"figures/histograms/partition_histogram_{dataset}"
         pio.write_image(fig, f"{path}.{image_format}", format=image_format)
         print(f"Saved figure in {path}.{image_format}.")
+
+
+def show_ablations_all_data(
+    datasets: Tuple[str, ...],
+    embedding_types: Tuple[str, ...],
+    metric: str,
+    ablation_method: str,
+    save_fig: bool = True,
+    image_format: str = "png",
+    **kwargs,
+):
+    """Visualize all ablation results (either random or holdout) for all datasets using four regressors.
+
+    Args:
+        datasets: Name of datasets
+        embedding_types: Which representations to include
+        metric: Which metric to include
+        save_fig: Include to save.
+        ablation_method: Specify ablation method.
+        image_format: Output file format. PDF for report.
+
+    """
+    df = pd.DataFrame()
+    for dataset in datasets:
+        df_i = summarise_results(
+            dataset=dataset,
+            metric=metric,
+            embedding_types=embedding_types,
+            all=False,
+            ablation=True,
+            unsupervised=False,
+            ablation_method=ablation_method,
+        )
+        df_i["dataset"] = dataset
+        df = pd.concat((df, df_i))
+
+    # Alter multiindex in rows/cols
+    df = df.reset_index()
+    df.columns = list(map("_".join, df.columns.values))
+    df = df.rename(columns={"model_": "model", "embedding_": "embedding", "dataset_": "dataset"})
+
+    # Rename embedding names
+    df["embedding"] = df["embedding"].replace(repr_dict())
+    if ablation_method == "holdout":
+        title = f"Results with hold-out validation (ablation). Metric: {metric.capitalize()}."
+    else:
+        title = f"Results with repeated random splitting (ablation). Metric: {metric.capitalize()}."
+
+    fig = px.bar(
+        data_frame=df,
+        x="embedding",
+        color="embedding",
+        y=f"test_{metric}_mean",
+        error_y=f"test_{metric}_sem",
+        facet_col="model",
+        facet_row="dataset",
+        width=900,
+        height=700,
+        color_discrete_sequence=px.colors.qualitative.G10,
+        category_orders={
+            "model": ["KNN", "Ridge", "RandomForest", "MLP"]
+            if metric in ["rmse", "spearman", "mae"]
+            else ["KNN", "LogReg", "RandomForest", "MLP"],
+            "embedding": ["CT", "ESM-1B", "ESM-2", "ESM-IF1", "EVE", "Evoformer (AF2)", "MSA (1-HOT)"],
+        },
+        title=title,
+    )
+
+    # fig.update_layout({"yaxis": {"title": title, "visible": True, "showticklabels": True}})
+    # Remove x-labels (non-informative)
+    fig["layout"]["xaxis"]["title"]["text"] = ""
+    fig["layout"]["xaxis2"]["title"]["text"] = ""
+    fig["layout"]["xaxis3"]["title"]["text"] = ""
+    fig["layout"]["xaxis4"]["title"]["text"] = ""
+    # Dataset as y-labels
+    fig["layout"]["yaxis"]["title"]["text"] = datasets[2].upper()
+    fig["layout"]["yaxis5"]["title"]["text"] = datasets[1].upper()
+    fig["layout"]["yaxis9"]["title"]["text"] = datasets[0].upper()
+    # Update annotations
+    for i, reg in enumerate(["KNN", "Ridge", "RandomForest", "MLP"]):
+        fig["layout"]["annotations"][i]["text"] = reg
+    for i, dat in enumerate(datasets, 1):
+        fig["layout"]["annotations"][-i]["text"] = ""
+
+    # Capitalize legend header
+    fig["layout"]["legend"]["title"]["text"] = "Embedding"
+
+    fig.update_xaxes(showticklabels=False)
+    if metric in ["auroc", "spearman", "mcc", "f1"]:
+        fig.update_yaxes(range=[0, 1])
+
+    fig.update_layout(title={"x": 0.5})
+
+    if save_fig:
+        path = f"figures/all_{ablation_method}_results"
+        pio.write_image(fig, f"{path}.{image_format}", format=image_format)
+        print(f"Saved figure to {path}.{image_format}.")
+    else:
+        fig.show()
+
+
+if __name__ == "__main__":
+    datasets: Tuple[str, ...] = ("gh114", "cm", "ppat")
+    embedding_types: Tuple[str, ...] = ("ct", "af2", "esm_1b", "esm_2", "esm_if1", "eve", "onehot")
+    metric: str = "spearman"
+    # ablation_method: str = "holdout"
+    ablation_method: str = "random"
+    save_fig: bool = True
+    image_format: str = "png"
+    show_ablations_all_data(datasets, embedding_types, metric, ablation_method, save_fig, image_format)
