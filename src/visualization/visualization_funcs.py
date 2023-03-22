@@ -498,10 +498,11 @@ def generate_partition_histograms(image_format: str = "pdf"):
         print(f"Saved figure in {path}.{image_format}.")
 
 
-def show_ablations_all_data(
+def show_results_all_predictors(
     datasets: Tuple[str, ...],
     embedding_types: Tuple[str, ...],
     metric: str,
+    ablation: bool,
     ablation_method: str,
     save_fig: bool = True,
     image_format: str = "png",
@@ -514,6 +515,7 @@ def show_ablations_all_data(
         embedding_types: Which representations to include
         metric: Which metric to include
         save_fig: Include to save.
+        ablation: True/False
         ablation_method: Specify ablation method.
         image_format: Output file format. PDF for report.
 
@@ -525,7 +527,7 @@ def show_ablations_all_data(
             metric=metric,
             embedding_types=embedding_types,
             all=False,
-            ablation=True,
+            ablation=ablation,
             unsupervised=False,
             ablation_method=ablation_method,
         )
@@ -541,8 +543,10 @@ def show_ablations_all_data(
     df["embedding"] = df["embedding"].replace(repr_dict())
     if ablation_method == "holdout":
         title = f"Results with hold-out validation (ablation). Metric: {metric.capitalize()}."
-    else:
+    elif ablation_method == "random":
         title = f"Results with repeated random splitting (ablation). Metric: {metric.capitalize()}."
+    else:
+        title = f"Results for using all predictors. Metric: {metric.capitalize()}."
 
     fig = px.bar(
         data_frame=df,
@@ -590,7 +594,10 @@ def show_ablations_all_data(
     fig.update_layout(title={"x": 0.5})
 
     if save_fig:
-        path = f"figures/all_{ablation_method}_results"
+        if ablation:
+            path = f"figures/all_{ablation_method}_results"
+        else:
+            path = f"figures/all_results"
         pio.write_image(fig, f"{path}.{image_format}", format=image_format)
         print(f"Saved figure to {path}.{image_format}.")
     else:
@@ -601,8 +608,12 @@ if __name__ == "__main__":
     datasets: Tuple[str, ...] = ("gh114", "cm", "ppat")
     embedding_types: Tuple[str, ...] = ("ct", "af2", "esm_1b", "esm_2", "esm_if1", "eve", "onehot")
     metric: str = "spearman"
-    # ablation_method: str = "holdout"
-    ablation_method: str = "random"
+    ablation: bool = False
+    if ablation:
+        # ablation_method: str = "holdout"
+        ablation_method: str = "random"
+    else:
+        ablation_method = None
     save_fig: bool = True
-    image_format: str = "png"
-    show_ablations_all_data(datasets, embedding_types, metric, ablation_method, save_fig, image_format)
+    image_format: str = "pdf"
+    show_results_all_predictors(datasets, embedding_types, metric, ablation, ablation_method, save_fig, image_format)

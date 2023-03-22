@@ -22,6 +22,16 @@ do
       --image_format $IMAGE_FORMAT \
       --ablation_method $ABLATION
     done
+
+    if [ "$DATASET" = "cm" ]; then
+       python src/process_results.py \
+      --dataset $DATASET \
+      --metric "mcc" \
+      --image_format $IMAGE_FORMAT \
+      --save_csv \
+      --bar_plot
+    fi
+
 done
 
 # GENERATE COMBINED PLOT (USED IN MANUSCRIPT)

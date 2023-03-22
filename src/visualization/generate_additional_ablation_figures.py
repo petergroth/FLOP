@@ -1,6 +1,6 @@
 import argparse
 
-from src.visualization.visualization_funcs import results_single_dataset, show_ablations_all_data
+from src.visualization.visualization_funcs import results_single_dataset, show_results_all_predictors
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -16,6 +16,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if args.all_ablation:
         args.datasets = ["gh114", "cm", "ppat"]
-        show_ablations_all_data(**vars(args))
+        show_results_all_predictors(**vars(args))
     else:
         results_single_dataset(ablation=True, **vars(args))
