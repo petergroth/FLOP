@@ -37,7 +37,23 @@ For unsupervised Tranception scoring from https://github.com/OATML-Markslab/Tran
 #### PyBioMed
 For compositional/transitional representation generation from https://github.com/gadsbyfly/PyBioMed, clone and install the repository locally.
 
-## Reproduce results
+## Downloading data
+The datasets, computed representations, and trained EVE models are hosted at the _Electronic Research Data Archive_ (ERDA) by the University of Copenhagen.
+The data can be accessed at https://sid.erda.dk/sharelink/ETd7gANO7C, which allows for either downloading three zip-archives (data, models, representations) or individual files.
+The directory structure of the archives can be found at the bottom of this readme under **Project organization**.
+
+**Datasets**: Includes `raw` data (e.g., original tsv/csv-files, pdb-files for all sequences, unaligned FASTA-files etc.), `interim` data (e.g., files generated during curation, generation of representations, etc.), and `processed` data which is simply the cleaned csv-files with protein ids, sequence, target values, stratification label, and partition indicators. A snippet of the processed GH114 file can be seen here:
+
+| index | name     | sequence    | target_reg | target_class | part_0 | part_1 | part_2 |
+|-------|----------|-------------|------------|--------------|--------|--------|--------|
+| 0     | SEQ_ID_0 | MVTFNKIA... | 0.04565    | 1            | 1      | 0      | 0      |
+| 1     | SEQ_ID_1 | MVALTQFA... | 0.10835    | 1            | 1      | 0      | 0      |
+| 2     | SEQ_ID_2 | MVTFSRIA... | 0.17585    | 0            | 1      | 0      | 0      |
+
+In the above, all three proteins belong to the first cross-validation partition. All datasets follow the above structure. The partition columns can easily be converted into either boolean masks for quick indexing or a single column with integer values specifying the partition.
+
+**Models**: Includes the trained EVE models for each dataset, where each dataset has three models in total (trained with different random seeds). Other pre-trained models, e.g., ESM-models, should be extracted from their original sources and placed in the `models` directory.
+## Reproducing the results
 
 ```bash
 
@@ -61,9 +77,9 @@ bash scripts/process_results.sh
 ## Adding new representations
 To run the setup on a novel representation, a directory should be created for each dataset: `./embeddings/$dataset/new_representation`, in which all the representation of each sequence is saved as individual files (following the current convention).
 
-A new option should then be added to the `extract_all_embeddings`-function in `./src/data/data_utils.py`, which follows the convention present of sequentially loading all representations and saving them in a numpy array.
+A new `if`-option should then be added to the `extract_all_embeddings`-function in `./src/data/data_utils.py`, which follows the convention present of sequentially loading all representations and saving them in a numpy array.
 
-This representation can then be benchmarked for a dataset by running 
+This representation can then be benchmarked for a dataset by running:
 
 ```bash
 python src/training/fit_model.py --dataset dataset --embedding_types "new_representation"
@@ -72,14 +88,14 @@ python src/training/fit_model.py --dataset dataset --embedding_types "new_repres
 The results can be processed, saved, and visualized with
 
 ```bash
-python src/process_results.py --dataset datset --save_csv --bar_plot --embedding_types "new_representation"
+python src/process_results.py --dataset dataset --save_csv --bar_plot --embedding_types "new_representation"
 ```
 
-NOTE: This might overwrite existing figures/result files.
+NOTE: This might overwrite existing figures/result files, depending on the included representations. 
 
 
 ## Recreate phylogenetic trees
-To recreate the included phylogenetic trees, run the following 
+To recreate the included phylogenetic trees from the manuscript, run the following 
 ```bash
 bash scripts/generate_phylogenetic_trees.sh ppat
 bash scripts/mmseqs_clustering.sh ppat
