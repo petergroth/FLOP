@@ -44,19 +44,22 @@ The directory structure of the archives can be found at the bottom of this readm
 
 **Datasets**: Includes `raw` data (e.g., original tsv/csv-files, pdb-files for all sequences, unaligned FASTA-files etc.), `interim` data (e.g., files generated during curation, generation of representations, etc.), and `processed` data which is simply the cleaned csv-files with protein ids, sequence, target values, stratification label, and partition indicators. A snippet of the processed GH114 file can be seen here:
 
-| index | name     | sequence    | target_reg | target_class | part_0 | part_1 | part_2 |
-|-------|----------|-------------|------------|--------------|--------|--------|--------|
-| 0     | SEQ_ID_0 | MVTFNKIA... | 0.04565    | 1            | 1      | 0      | 0      |
-| 1     | SEQ_ID_1 | MVALTQFA... | 0.10835    | 1            | 1      | 0      | 0      |
-| 2     | SEQ_ID_2 | MVTFSRIA... | 0.17585    | 0            | 1      | 0      | 0      |
+| index | name     | sequence         | target_reg | target_class | part_0 | part_1 | part_2 |
+|-------|----------|------------------|------------|--------------|--------|--------|--------|
+| 0     | SEQ_ID_0 | MVTFNKIALTALA... | 0.04565    | 1            | 1      | 0      | 0      |
+| 1     | SEQ_ID_1 | MVALTQFALAALA... | 0.10835    | 1            | 1      | 0      | 0      |
+| 2     | SEQ_ID_2 | MVTFSRIAVTTLA... | 0.17585    | 0            | 1      | 0      | 0      |
+| 3     | SEQ_ID_3 | MEIVFRRTRVRSV... | -0.01965   | 1            | 0      | 1      | 0      |
 
-In the above, all three proteins belong to the first cross-validation partition. All datasets follow the above structure. The partition columns can easily be converted into either boolean masks for quick indexing or a single column with integer values specifying the partition.
+In the above, the three proteins belong to the first cross-validation partition (1 in `part_0` column), while the fourth belongs to the second partition (1 in the `part_1` column). All datasets follow the above structure. The partition columns can easily be converted into either boolean masks for quick indexing or a single column with integer values specifying the partition.
 
 **Models**: Includes the trained EVE models for each dataset, where each dataset has three models in total (trained with different random seeds). Other pre-trained models, e.g., ESM-models, should be extracted from their original sources and placed in the `models` directory.
+
+**Representations**: Includes all the generated partitions in their original formats.
+
 ## Reproducing the results
 
 ```bash
-
 # Process and split datasets [optional]
 bash scripts/compile_dataset.sh
 
