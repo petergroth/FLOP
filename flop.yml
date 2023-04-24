@@ -24,4 +24,5 @@ dependencies:
   - conda-forge::rdkit
   - ipython
   - pip
-
+  - pip:
+      - graph-part
