@@ -1,4 +1,6 @@
+"""Script to fit models to all datasets and embeddings."""
 import argparse
+from pathlib import Path
 from typing import Tuple
 
 from src.data.data_utils import repr_dict
@@ -11,12 +13,13 @@ def run_ablation(dataset: str, embedding_types: Tuple[str, ...], low_n: bool = F
     Args:
         dataset: One of gh114, cm, ppat
         embedding_types: List of embedding/representation types
+        low_n: Whether to limit max number of neighbours in KNN to 5
 
     """
     eve_suffixes = ("0", "1", "2")
     threads = 20
     n_partitions = 3
-    out_dir = f"results/ablation"
+    out_dir = Path("results", "ablation")
     task = "regression"
     embedding_dict = repr_dict()
 
@@ -28,7 +31,7 @@ def run_ablation(dataset: str, embedding_types: Tuple[str, ...], low_n: bool = F
             df = fit_model_CV(
                 dataset, embedding_type, n_partitions, eve_suffixes, threads, ablation=True, task=task, low_n=low_n
             )
-            out_path = f"{out_dir}/{dataset}_results_{embedding_type}_all.csv"
+            out_path = out_dir / f"{dataset}_results_{embedding_type}_all.csv"
             df.to_csv(out_path, index_label="index")
 
     print(f"Running CV on {dataset} dataset with random partitions.")
@@ -37,7 +40,7 @@ def run_ablation(dataset: str, embedding_types: Tuple[str, ...], low_n: bool = F
         print(f"Fitting regressors to {embedding_dict[embedding_type]}.")
         seeds = [0, 1, 2]
         df = fit_model_random(dataset, embedding_type, eve_suffixes, seeds, threads, task, low_n)
-        out_path = f"{out_dir}/{dataset}_results_{embedding_type}_random.csv"
+        out_path = out_dir / f"{dataset}_results_{embedding_type}_random.csv"
         df.to_csv(out_path, index_label="index")
 
     print(f"Running holdout-validation on {dataset} dataset.")
@@ -46,7 +49,7 @@ def run_ablation(dataset: str, embedding_types: Tuple[str, ...], low_n: bool = F
         print(f"Fitting regressors to {embedding_dict[embedding_type]}.")
         split_key = "holdout"
         df = fit_model_holdout(dataset, embedding_type, split_key, eve_suffixes, threads, task, low_n)
-        out_path = f"{out_dir}/{dataset}_results_{embedding_type}_holdout.csv"
+        out_path = out_dir / f"{dataset}_results_{embedding_type}_holdout.csv"
         df.to_csv(out_path, index_label="index")
 
 
@@ -72,7 +75,7 @@ def run_CV(
     print(f"Running CV on {dataset} dataset.")
     eve_suffixes = ("0", "1", "2")
     n_partitions = 3
-    out_dir = f"results/{dataset}"
+    out_dir = Path("results", dataset)
     ablation = False
     embedding_dict = repr_dict()
 
@@ -83,9 +86,9 @@ def run_CV(
             dataset, embedding_type, n_partitions, eve_suffixes, threads, ablation, task, low_n, save_predictions
         )
         if task == "regression":
-            out_path = f"{out_dir}/{dataset}_results_{embedding_type}.csv"
+            out_path = out_dir / f"{dataset}_results_{embedding_type}.csv"
         else:
-            out_path = f"{out_dir}/{dataset}_results_{embedding_type}_classification.csv"
+            out_path = out_dir / f"{dataset}_results_{embedding_type}_classification.csv"
         df.to_csv(out_path, index_label="index")
 
     print("Finished.")
@@ -100,6 +103,7 @@ def main(
     threads: int,
     embedding_types: Tuple["str", ...],
 ):
+    """Main function to run CV or ablation experiments."""
     if ablation:
         run_ablation(dataset, embedding_types, low_n)
     else:

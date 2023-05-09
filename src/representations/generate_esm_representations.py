@@ -1,6 +1,4 @@
-"""
-Adaption of https://github.com/facebookresearch/esm/blob/main/scripts/extract.py
-"""
+"""Adaption of https://github.com/facebookresearch/esm/blob/main/scripts/extract.py"""
 import argparse
 
 import esm
@@ -27,7 +25,7 @@ def generate_esm_embeddings(dataset: str, model_name: str, include):
         pretrained_path = "models/esm2_t36_3B_UR50D.pt"
     elif model_name == "esm_if1":
         print("ERROR. Use generate_esm_if1_representations.py instead")
-        return
+        raise ValueError
     else:
         raise ValueError
 

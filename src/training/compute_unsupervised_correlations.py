@@ -1,3 +1,4 @@
+"""Script to compute correlations between unsupervised fitness proxies and target values."""
 import argparse
 from typing import Tuple
 
@@ -244,6 +245,7 @@ def compute_unsupervised_ablation_correlation_cv(dataset: str) -> Tuple:
 
 
 def main(args):
+    """Main function."""
     if args.all_to_csv:
         datasets = []
         elbo_r = []

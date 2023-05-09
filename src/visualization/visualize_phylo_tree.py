@@ -1,3 +1,4 @@
+"""Visualize phylogenetic tree for dataset"""
 import argparse
 import os
 from collections import defaultdict
@@ -10,6 +11,12 @@ os.environ["QT_QPA_PLATFORM"] = "offscreen"
 
 
 def draw_phylogenetic_tree(dataset: str, how: str):
+    """Draw phylogenetic tree for dataset
+
+    Args:
+        dataset: Name of dataset
+        how: How to color the tree. Either "flop", "mmseqs" or "random"
+    """
     # Specify dataset and path to tree-file
     tree_path = f"data/interim/{dataset}/{dataset}.tree"
 
@@ -81,8 +88,8 @@ def draw_phylogenetic_tree(dataset: str, how: str):
             nstyle["fgcolor"] = colors[node.name]
             node.set_style(nstyle)
         nstyle["size"] = 0
-        nstyle["vt_line_width"] = 0
-        nstyle["hz_line_width"] = 0
+        nstyle["vt_line_width"] = 2
+        nstyle["hz_line_width"] = 2
         node.set_style(nstyle)
         N = RectFace(bgcolor=colors[node.name], fgcolor=colors[node.name], width=60, height=24)
         node.add_face(N, 0, position="aligned")

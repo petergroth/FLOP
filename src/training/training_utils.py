@@ -1,3 +1,4 @@
+"""Utility functions for training and evaluating models."""
 from itertools import permutations
 from typing import Tuple, Dict
 
@@ -34,6 +35,7 @@ def fit_model_random(
         seeds: List of random seeds
         threads: Number of threads for multiprocessing
         task: Either `regression` or `classification`
+        low_n: Whether to limit max number of neighbours in KNN to 5
 
     Returns:
         DataFrame containing metrics and evaluation details.
