@@ -9,15 +9,6 @@ After cloning this repository, an environment can be built directly via
 conda env create -f flop.yml
 ```
 
-### Install Graph-Part
-The splitting procedure uses Graph-Part (https://github.com/graph-part/graph-part). The repository can be installed (as per the README) via
-
-```bash
-git clone https://github.com/fteufel/graph-part.git
-cd graph-part
-pip install .
-```
-
 ### Optional dependencies
 The generation of protein representations relies on various codebases.
 
