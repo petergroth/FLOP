@@ -3,6 +3,7 @@ import argparse
 import logging
 import os.path
 
+from pathlib import Path
 import numpy as np
 import pandas as pd
 from sklearn.mixture import GaussianMixture
@@ -50,16 +51,21 @@ def parse_cm(
     dataset = "cm"
 
     # Define output paths
+    interim_dir = Path("data", "interim", dataset)
+    processed_dir = Path("data", "processed", dataset)
     if active:
-        out_csv_path = f"data/processed/{dataset}/{dataset}.csv"
-        out_interim_csv_path = f"data/interim/{dataset}/{dataset}.csv"
-        ckpt_path = f"data/interim/{dataset}/{dataset}_cv_graphpart_edges.csv"
-        log_path = f"data/interim/{dataset}/compile_{dataset}.log"
+        out_csv_path = processed_dir / f"{dataset}.csv"
+        out_interim_csv_path = interim_dir / f"{dataset}.csv"
+        ckpt_path = interim_dir / f"{dataset}_cv_graphpart_edges.csv"
+        log_path = interim_dir / f"compile_{dataset}.log"
     else:
-        out_csv_path = f"data/processed/{dataset}/{dataset}_all.csv"
-        out_interim_csv_path = f"data/interim/{dataset}/{dataset}_all.csv"
-        ckpt_path = f"data/interim/{dataset}/{dataset}_cv_graphpart_edges_all.csv"
-        log_path = f"data/interim/{dataset}/compile_{dataset}_all.log"
+        out_csv_path = processed_dir / f"{dataset}_all.csv"
+        out_interim_csv_path = interim_dir / f"{dataset}_all.csv"
+        ckpt_path = interim_dir / f"{dataset}_cv_graphpart_edges_all.csv"
+        log_path = interim_dir / f"compile_{dataset}_all.log"
+
+    # Define input paths
+    raw_seq_path = Path("data", "raw", dataset, f"{dataset}.csv")
 
     # Setup logging
     if log:
@@ -76,8 +82,6 @@ def parse_cm(
     else:
         logging.info(f"Compiling {dataset} dataset using all sequences.")
 
-    # Define input paths
-    raw_seq_path = f"data/raw/{dataset}/{dataset}.csv"
 
     # Define GraphPart parameters
     alignment_mode = "needle"
