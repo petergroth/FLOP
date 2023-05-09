@@ -17,7 +17,7 @@ def parse_cm(
     force: bool = False,
     visualize: bool = True,
     initial_threshold: float = 0.35,
-    active: bool = True,  # Set to false for ablation study
+    active: bool = True,
     force_graphpart: bool = False,
     threads: int = 20,
 ):
