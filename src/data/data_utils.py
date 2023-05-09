@@ -1,6 +1,6 @@
 """This file contains various helper functions that are used in other scripts."""
 import logging
-import os
+
 from pathlib import Path
 from typing import Iterable, List, Tuple, Union
 
@@ -12,7 +12,7 @@ from graph_part import stratified_k_fold
 
 def precompute_edges(
     df: pd.DataFrame,
-    checkpoint_path: str,
+    checkpoint_path: Path,
     alignment_mode: str = "needle",
     threads: int = 10,
     force_graphpart: bool = False,
@@ -32,7 +32,7 @@ def precompute_edges(
     sequences = df["sequence"].tolist()
 
     # Precompute edges if generating test split
-    if not os.path.exists(checkpoint_path) or force_graphpart:
+    if not checkpoint_path.exists() or force_graphpart:
         logging.info("Pre-computing distances.")
         try:
             stratified_k_fold(
@@ -92,7 +92,7 @@ def generate_CV_partitions(
     labels = df[label].tolist()
 
     if checkpoint_path is None:
-        checkpoint_path = f"data/interim/{dataset}/{dataset}_graphpart_edges.csv"
+        checkpoint_path = Path("data", "interim", dataset, f"{dataset}_graphpart_edges.csv")
 
     # Precompute edges
     precompute_edges(
@@ -193,7 +193,7 @@ def extract_all_embeddings(
     y = df[target].values
     n_obs = len(df)
     names = df["name"].tolist()
-    embedding_dir = f"representations/{dataset}/{embedding_type}"
+    embedding_dir = Path("representations", dataset, embedding_type)
     dim_dict = {
         "esm_1b": 1280,
         "esm_2": 2560,
@@ -210,60 +210,50 @@ def extract_all_embeddings(
     if embedding_type == "esm_1b":
         # Extract embeddings
         for i, name in enumerate(names):
-            embedding = torch.load(f"{embedding_dir}/{name}.pt")
+            embedding = torch.load(embedding_dir / f"{name}.pt")
             embeddings[i] = embedding["mean_representations"][33].numpy()
 
     elif embedding_type == "esm_2":
         # Extract embeddings
         for i, name in enumerate(names):
-            embedding = torch.load(f"{embedding_dir}/{name}.pt")
+            embedding = torch.load(embedding_dir / f"{name}.pt")
             embeddings[i] = embedding["mean_representations"][36].numpy()
 
     elif embedding_type == "esm_if1":
         # Extract embeddings
         for i, name in enumerate(names):
-            embedding = torch.load(f"{embedding_dir}/{name}.pt").numpy()
+            embedding = torch.load(embedding_dir / f"{name}.pt").numpy()
             embeddings[i] = np.mean(embedding, axis=0)
 
-    elif embedding_type == "onehot":
+    elif embedding_type in ["onehot", "onehot_pad"]:
         # Find sequence length
-        dummy = np.load(f"{embedding_dir}/{df.iloc[0]['name']}.npy").flatten()
+        dummy = np.load(str(embedding_dir / f"{df.iloc[0]['name']}.npy")).flatten()
         dim = len(dummy)
 
         # Extract embeddings
         embeddings = np.zeros((n_obs, dim))
         for i, name in enumerate(names):
-            embedding = np.load(f"{embedding_dir}/{name}.npy")
-            embeddings[i] = embedding.flatten()
-
-    elif embedding_type == "onehot_pad":  # DO NOT USE
-        # Find sequence length
-        dummy = np.load(f"{embedding_dir}/{df.iloc[0]['name']}.npy").flatten()
-        dim = len(dummy)
-
-        # Extract embeddings
-        embeddings = np.zeros((n_obs, dim))
-        for i, name in enumerate(names):
-            embedding = np.load(f"{embedding_dir}/{name}.npy")
+            emb_path = embedding_dir / f"{name}.npy"
+            embedding = np.load(str(emb_path))
             embeddings[i] = embedding.flatten()
 
     elif embedding_type == "eve":
-        embedding_dir = f"{embedding_dir}/{suffix}"
+        embedding_dir = embedding_dir / f"{suffix}"
         # Extract embeddings
         for i, name in enumerate(names):
-            embedding = torch.load(f"{embedding_dir}/{name}.pt")
+            embedding = torch.load(embedding_dir / f"{name}.pt")
             embeddings[i] = embedding.numpy()
 
     elif embedding_type == "af2":
         # Extract embeddings
         for i, name in enumerate(names):
-            embedding = np.load(f"{embedding_dir}/{name}.npy")
+            embedding = np.load(str(embedding_dir / f"{name}.npy"))
             embeddings[i] = np.mean(embedding, axis=0)
 
     elif embedding_type == "ct":
         # Extract embeddings
         for i, name in enumerate(names):
-            embeddings[i] = np.load(f"{embedding_dir}/{name}.npy")
+            embeddings[i] = np.load(str(embedding_dir / f"{name}.npy"))
 
     else:
         raise NotImplementedError
@@ -287,6 +277,7 @@ def compute_median_seq_id(dataset: str):
 
 
 def repr_dict() -> dict:
+    """Returns dictionary mapping representation names to human-readable names."""
     return {
         "onehot": "MSA (1-HOT)",
         "eve": "EVE",
