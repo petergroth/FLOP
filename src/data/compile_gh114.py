@@ -2,6 +2,7 @@
 import argparse
 import logging
 import os.path
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -47,7 +48,15 @@ def parse_gh114(
     # Definitions      #
     ####################
 
+    # Setup paths
     dataset = "gh114"
+    interim_dir = Path("data", "interim", dataset)
+    processed_dir = Path("data", "processed", dataset)
+    out_csv_path = processed_dir / f"{dataset}.csv"
+    out_interim_csv_path = interim_dir / f"{dataset}.csv"
+    log_path = interim_dir / f"compile_{dataset}.log"
+    ckpt_path = interim_dir / f"{dataset}_cv_graphpart_edges.csv"
+    raw_seq_path = Path("data", "raw", dataset, f"{dataset}.csv")
 
     # Setup logging
     if log:
@@ -55,7 +64,7 @@ def parse_gh114(
         logging.basicConfig(
             level=logging.INFO,
             handlers=[
-                logging.FileHandler(filename=f"data/interim/{dataset}/compile_{dataset}.log", mode="w"),
+                logging.FileHandler(filename=log_path, mode="w"),
                 logging.StreamHandler(),
             ],
         )
@@ -63,13 +72,6 @@ def parse_gh114(
     else:
         logging.basicConfig(level=logging.ERROR)
     logging.info(f"Target column set to {target}")
-
-    # Define input paths
-    raw_seq_path = f"data/raw/{dataset}/{dataset}.csv"
-
-    # Define output path
-    out_csv_path = f"data/processed/{dataset}/{dataset}.csv"
-    out_interim_csv_path = f"data/interim/{dataset}/{dataset}.csv"
 
     # Define GraphPart parameters
     alignment_mode = "needle"
@@ -106,7 +108,6 @@ def parse_gh114(
 
     threshold = np.nan
     if "part_0" not in df:
-        ckpt_path = f"data/interim/{dataset}/{dataset}_cv_graphpart_edges.csv"
         ids, threshold = generate_CV_partitions(
             df,
             initial_threshold,
