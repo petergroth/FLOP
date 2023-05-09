@@ -1,12 +1,12 @@
 """This file contains various helper functions that are used in other scripts."""
 import logging
 import os
+from pathlib import Path
 from typing import Iterable, List, Tuple, Union
 
 import numpy as np
 import pandas as pd
 import torch.linalg
-
 from graph_part import stratified_k_fold
 
 
@@ -59,7 +59,7 @@ def generate_CV_partitions(
     threads: int = 10,
     min_pp_split: float = 0.25,
     threshold_inc: float = 0.05,
-    checkpoint_path: Union[str, None] = None,
+    checkpoint_path: Union[str, None, Path] = None,
     label: str = "target_class",
     force_graphpart: bool = False,
 ) -> Tuple[List[Iterable], float]:
