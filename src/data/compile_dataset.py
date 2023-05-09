@@ -2,6 +2,8 @@
 import argparse
 import logging
 import os.path
+from pathlib import Path
+from typing import Union
 
 import numpy as np
 import pandas as pd
@@ -15,7 +17,7 @@ def parse_dataset(
     dataset: str,
     name_key: str,
     target: str,
-    dataset_path: str,
+    dataset_path: Union[str, Path],
     log: bool = True,
     force: bool = False,
     visualize: bool = True,
@@ -59,18 +61,24 @@ def parse_dataset(
 
     # Define input paths
     raw_seq_path = f"{dataset_path}"
-    assert dataset_path[-3:] in ["csv", "tsv"]
-    sep = "," if dataset_path[-3] == "c" else "\t"
+    dataset_path = Path(dataset_path)
+    assert dataset_path.suffix in [".csv", ".tsv"]
+    sep = "," if dataset_path.suffix == ".csv" else "\t"
 
-    # Define output path
-    out_csv_path = f"data/processed/{dataset}/{dataset}.csv"
-    out_interim_csv_path = f"data/interim/{dataset}/{dataset}.csv"
+    interim_dir = Path("data", "interim", dataset)
+    processed_dir = Path("data", "processed", dataset)
+
+    # Define paths
+    out_csv_path = processed_dir / f"{dataset}.csv"
+    out_interim_csv_path = interim_dir / f"{dataset}.csv"
+    log_path = interim_dir / f"compile_{dataset}.log"
+    ckpt_path = interim_dir / f"{dataset}_cv_graphpart_edges.csv"
 
     # Create directories (if missing)
-    os.makedirs(f"data/processed/{dataset}", exist_ok=True)
-    os.makedirs(f"data/interim/{dataset}", exist_ok=True)
+    interim_dir.mkdir(parents=True, exist_ok=True)
+    processed_dir.mkdir(parents=True, exist_ok=True)
     if visualize:
-        os.makedirs(f"figures/{dataset}/splits", exist_ok=True)
+        Path("figures", dataset, "splits").mkdir(parents=True, exist_ok=True)
 
     # Setup logging
     if log:
@@ -78,7 +86,7 @@ def parse_dataset(
         logging.basicConfig(
             level=logging.INFO,
             handlers=[
-                logging.FileHandler(filename=f"data/interim/{dataset}/{dataset}_compilation.log", mode="w"),
+                logging.FileHandler(filename=log_path, mode="w"),
                 logging.StreamHandler(),
             ],
         )
@@ -143,7 +151,6 @@ def parse_dataset(
 
     threshold = np.nan
     if "part_0" not in df:
-        ckpt_path = f"data/interim/{dataset}/{dataset}_cv_graphpart_edges.csv"
         ids, threshold = generate_CV_partitions(
             df,
             initial_threshold,
