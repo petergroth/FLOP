@@ -12,6 +12,9 @@ from sklearn.decomposition import PCA
 from src.data.data_utils import repr_dict
 from src.training.training_utils import extract_all_embeddings, summarise_results
 
+# Prevent printing loading messages on pdfs with plotly
+pio.kaleido.scope.mathjax = None
+
 
 def show_target_histogram(df: pd.DataFrame, dataset: str, target: Union[str, List[str]] = "target"):
     """Function to visualize target distribution of one dataset during its compilation
@@ -215,7 +218,7 @@ def results_single_dataset(
             "model": ["KNN", "Ridge", "RandomForest", "MLP"]
             if metric in ["rmse", "spearman", "mae"]
             else ["KNN", "LogReg", "RandomForest", "MLP"],
-            "embedding": ["CT", "ESM-1B", "ESM-2", "ESM-IF1", "EVE", "Evoformer (AF2)", "MSA (1-HOT)"],
+            "embedding": ["CT", "ESM-1B", "ESM-2", "ESM-IF1", "EVE", "Evoformer (AF2)", "MIF", "MIF-ST", "MSA (1-HOT)"],
         },
         title=f"Dataset: {dataset.upper()}. Metric: {metric.capitalize()}",
     )
@@ -309,7 +312,7 @@ def all_test_results_barplot(
         color_discrete_sequence=px.colors.qualitative.G10,
         category_orders={
             "model": datasets,
-            "embedding": ["CT", "ESM-1B", "ESM-2", "ESM-IF1", "EVE", "Evoformer (AF2)", "MSA (1-HOT)"],
+            "embedding": ["CT", "ESM-1B", "ESM-2", "ESM-IF1", "EVE", "Evoformer (AF2)", "MIF", "MIF-ST", "MSA (1-HOT)"],
         },
         title=f"Metric: {metric}",
     )
@@ -563,7 +566,7 @@ def show_results_all_predictors(
             "model": ["KNN", "Ridge", "RandomForest", "MLP"]
             if metric in ["rmse", "spearman", "mae"]
             else ["KNN", "LogReg", "RandomForest", "MLP"],
-            "embedding": ["CT", "ESM-1B", "ESM-2", "ESM-IF1", "EVE", "Evoformer (AF2)", "MSA (1-HOT)"],
+            "embedding": ["CT", "ESM-1B", "ESM-2", "ESM-IF1", "EVE", "Evoformer (AF2)", "MIF", "MIF-ST", "MSA (1-HOT)"],
         },
         title=title,
     )
@@ -606,7 +609,7 @@ def show_results_all_predictors(
 
 if __name__ == "__main__":
     datasets: Tuple[str, ...] = ("gh114", "cm", "ppat")
-    embedding_types: Tuple[str, ...] = ("ct", "af2", "esm_1b", "esm_2", "esm_if1", "eve", "onehot")
+    embedding_types: Tuple[str, ...] = ("ct", "af2", "esm_1b", "esm_2", "esm_if1", "eve", "onehot", "mif", "mifst")
     metric: str = "spearman"
     ablation: bool = False
     if ablation:

@@ -203,6 +203,8 @@ def extract_all_embeddings(
         "eve": 50,
         "af2": 384,
         "ct": 42,
+        "mifst": 256,
+        "mif": 256,
     }
     dim = dim_dict[embedding_type]
     embeddings = np.zeros((n_obs, dim))
@@ -255,6 +257,12 @@ def extract_all_embeddings(
         for i, name in enumerate(names):
             embeddings[i] = np.load(str(embedding_dir / f"{name}.npy"))
 
+    elif embedding_type in ["mifst", "mif"]:
+        # Extract embeddings
+        for i, name in enumerate(names):
+            embedding = torch.load(embedding_dir / f"{name}.pt")
+            embeddings[i] = embedding.numpy()
+
     else:
         raise NotImplementedError
     return embeddings, y, names
@@ -287,4 +295,6 @@ def repr_dict() -> dict:
         "esm_2": "ESM-2",
         "esm_if1": "ESM-IF1",
         "onehot_pad": "UNALIGNED (1-HOT)",
+        "mifst": "MIF-ST",
+        "mif": "MIF"
     }
