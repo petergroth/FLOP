@@ -10,12 +10,12 @@ if __name__ == "__main__":
     parser.add_argument("--ablation_method", type=str, required=True)
     parser.add_argument("--all_ablation", action="store_true")
     parser.add_argument(
-        "--embedding_types", type=str, nargs="+", default=("af2", "esm_1b", "esm_2", "esm_if1", "eve", "onehot", "ct")
+        "--embedding_types", type=str, nargs="+", default=("af2", "esm_1b", "esm_2", "esm_if1", "eve", "onehot", "ct", "mif", "mifst")
     )
 
     args = parser.parse_args()
     if args.all_ablation:
         args.datasets = ["gh114", "cm", "ppat"]
-        show_results_all_predictors(**vars(args))
+        show_results_all_predictors(ablation=True, **vars(args))
     else:
         results_single_dataset(ablation=True, **vars(args))
