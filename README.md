@@ -35,9 +35,9 @@ For unsupervised Tranception scoring from https://github.com/OATML-Markslab/Tran
 #### PyBioMed
 For compositional/transitional representation generation from https://github.com/gadsbyfly/PyBioMed, clone and install the repository locally.
 
-## Downloading data
+## Accessing data, representations, and models
 The datasets, computed representations, and trained EVE models are hosted at the _Electronic Research Data Archive_ (ERDA) by the University of Copenhagen.
-The data can be accessed at https://sid.erda.dk/sharelink/ETd7gANO7C, which allows for either downloading three zip-archives (data, models, representations) or individual files.
+The data can be accessed at LINK_TO_ERDA, which allows for either downloading three zip-archives (data, models, representations) or individual files.
 The directory structure of the archives can be found at the bottom of this readme under **Project organization**.
 
 **Datasets**: Includes `raw` data (e.g., original tsv/csv-files, pdb-files for all sequences, unaligned FASTA-files etc.), `interim` data (e.g., files generated during curation, generation of representations, etc.), and `processed` data which is simply the cleaned csv-files with protein ids, sequence, target values, stratification label, and partition indicators. A snippet of the processed GH114 file can be seen here:
@@ -54,6 +54,12 @@ In the above, the three proteins belong to the first cross-validation partition 
 **Models**: Includes the trained EVE models for each dataset, where each dataset has three models in total (trained with different random seeds). Other pre-trained models, e.g., ESM-models, should be extracted from their original sources and placed in the `models` directory.
 
 **Representations**: Includes all the generated partitions in their original formats.
+
+## Note on data
+The used datasets are curated versions of three publicly available datasets:
+- GH114 was extracted with permission from the inventors from the WO2019228448 patent which can be accessed at https://patentscope.wipo.int/search/en/detail.jsf?docId=WO2019228448 or alternatively at https://patents.google.com/patent/WO2019228448A1/en. 
+- CM was extracted from the supplementary materials of _An evolution-based model for designing chorismate mutase enzymes_ by Russ et al (2020), which can be accessed at https://www.science.org/doi/full/10.1126/science.aba3304.
+- PPAT was extracted from the supplementary materials of _Multiplexed gene synthesis in emulsions for exploring protein functional landscapes_ by Plesa et al. (2018), which can be accessed at https://www.science.org/doi/10.1126/science.aao5167.
 
 ## Reproducing the results
 
