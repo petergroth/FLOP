@@ -80,7 +80,7 @@ bash scripts/comptue_tranception_scores.sh
 ```
 
 ## Adding new representations
-To run the setup on a novel representation, a directory should be created for each dataset: `./embeddings/$dataset/new_representation`, in which all the representation of each sequence is saved as individual files (following the current convention).
+To run the setup on a novel representation, a directory should be created for each dataset: `./representations/$dataset/new_representation`, in which all the representation of each sequence is saved as individual files (following the current convention).
 
 A new `if`-option should then be added to the `extract_all_embeddings`-function in `./src/data/data_utils.py`, which follows the convention present of sequentially loading all representations and saving them in a numpy array.
 
