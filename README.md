@@ -40,7 +40,7 @@ The datasets, computed representations, and trained EVE models are hosted at the
 The data can be accessed at LINK_TO_ERDA, which allows for either downloading three zip-archives (data, models, representations) or individual files.
 The directory structure of the archives can be found at the bottom of this readme under **Project organization**.
 
-**Datasets**: Includes `raw` data (e.g., original tsv/csv-files, pdb-files for all sequences, unaligned FASTA-files etc.), `interim` data (e.g., files generated during curation, generation of representations, etc.), and `processed` data which is simply the cleaned csv-files with protein ids, sequence, target values, stratification label, and partition indicators. A snippet of the processed GH114 file can be seen here:
+**Datasets**: Includes `raw` data (e.g., original tsv/csv-files, pdb-files for all sequences, unaligned FASTA-files etc.), `interim` data (e.g., files generated during curation, generation of representations, etc.), and `processed` data which is the cleaned csv-files with protein ids, sequence, target values, stratification label, and partition indicators. A snippet of the processed GH114 file can be seen here:
 
 | index | name     | sequence         | target_reg | target_class | part_0 | part_1 | part_2 |
 |-------|----------|------------------|------------|--------------|--------|--------|--------|
@@ -49,7 +49,7 @@ The directory structure of the archives can be found at the bottom of this readm
 | 2     | SEQ_ID_18 | KPATAARATGLAD... | 0.60    | 1            | 0      | 1      | 0      |
 | 3     | SEQ_ID_21 | AAVTLPPTHAGFD... | 0.72   | 1            | 1      | 0      | 0      |
 
-In the above, the three proteins belong to the first cross-validation partition (1 in `part_0` column), while the fourth belongs to the second partition (1 in the `part_1` column). All datasets follow the above structure. The partition columns can easily be converted into either boolean masks for quick indexing or a single column with integer values specifying the partition.
+In the above, the first, second, and fourth proteins belong to the first cross-validation partition (1 in `part_0` column), while the third belongs to the second partition (1 in the `part_1` column). All datasets follow the above structure. The partition columns can easily be converted into either boolean masks for quick indexing or a single column with integer values specifying the partition.
 
 **Models**: Includes the trained EVE models for each dataset, where each dataset has three models in total (trained with different random seeds). Other pre-trained models, e.g., ESM-models, should be extracted from their original sources and placed in the `models` directory.
 
