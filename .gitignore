@@ -1,0 +1,44 @@
+# Filetypes
+**/*.afdesign
+**/*.pyc
+**/*.png
+**/*.zip
+# Hidden files
+.env
+.DS_store
+**/.DS_store
+.idea
+.idea/
+# Directories
+/data/*
+!/data/processed/
+/data/processed/*
+!/data/processed/cm
+!/data/processed/gh114
+!/data/processed/ppat
+/data/processed/cm/*
+/data/processed/gh114/*
+/data/processed/ppat/*
+!/data/processed/cm/cm.csv
+!/data/processed/gh114/gh114.csv
+!/data/processed/ppat/ppat.csv
+figures/
+reports/
+/representations/*
+deprecated/
+notebooks/
+**/archived
+**/deprecated
+# Single files
+/needleall.error
+src.egg-info
+# Modules
+graph-part/
+Tranception/
+EVE/*
+!/EVE/utils/
+/EVE/utils/*
+!/EVE/utils/data_utils.py
+!/EVE/EVE/
+/EVE/EVE/*
+!/EVE/EVE/default_model_params.json

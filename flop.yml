@@ -1,0 +1,28 @@
+name: FLOP_env
+channels:
+  - pytorch
+  - defaults
+  - conda-forge
+  - bioconda
+  - nvidia
+dependencies:
+  - python=3.8
+  - nvidia::cudatoolkit=11.3
+  - pytorch::pytorch
+  - scipy
+  - scikit-learn
+  - plotly
+  - numpy
+  - pandas
+  - seaborn
+  - matplotlib
+  - biopython
+  - biotite
+  - tqdm
+  - plotly
+  - bioconda::emboss
+  - conda-forge::rdkit
+  - ipython
+  - pip
+  - pip:
+      - graph-part
