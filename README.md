@@ -37,7 +37,7 @@ For compositional/transitional representation generation from https://github.com
 
 ## Accessing data, representations, and models
 The datasets, computed representations, and trained EVE models are hosted at the _Electronic Research Data Archive_ (ERDA) by the University of Copenhagen.
-The data can be accessed at LINK_TO_ERDA, which allows for either downloading three zip-archives (data, models, representations) or individual files.
+The data can be accessed at https://sid.erda.dk/cgi-sid/ls.py?share_id=HLXs3e9yCu, which allows for either downloading three zip-archives (data, models, representations) or individual files.
 The directory structure of the archives can be found at the bottom of this readme under **Project organization**.
 
 **Datasets**: Includes `raw` data (e.g., original tsv/csv-files, pdb-files for all sequences, unaligned FASTA-files etc.), `interim` data (e.g., files generated during curation, generation of representations, etc.), and `processed` data which is the cleaned csv-files with protein ids, sequence, target values, stratification label, and partition indicators. A snippet of the processed GH114 file can be seen here:
