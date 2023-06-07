@@ -1,6 +1,6 @@
 # FLOP: Tasks for Fitness Landscapes Of Protein wildtypes
 
-This is the official code repository for the paper "FLOP: Tasks for Fitness Landscapes Of Protein wildtypes" (LINK TO PAPER).
+This is the official code repository for the paper _FLOP: Tasks for Fitness Landscapes Of Protein wildtypes_ by Groth et al. (2023) [LINK_TO_PAPER].
 
 ## Installation
 After cloning this repository, an environment can be built directly via
@@ -40,7 +40,7 @@ The datasets, computed representations, and trained EVE models are hosted at the
 The data can be accessed at https://sid.erda.dk/cgi-sid/ls.py?share_id=HLXs3e9yCu, which allows for either downloading three zip-archives (data, models, representations) or individual files.
 The directory structure of the archives can be found at the bottom of this readme under **Project organization**.
 
-**Datasets**: Includes `raw` data (e.g., original tsv/csv-files, pdb-files for all sequences, unaligned FASTA-files etc.), `interim` data (e.g., files generated during curation, generation of representations, etc.), and `processed` data which is the cleaned csv-files with protein ids, sequence, target values, stratification label, and partition indicators. A snippet of the processed GH114 file can be seen here:
+**Datasets**: Includes `raw` data (e.g., original csv-files, pdb-files for all sequences, FASTA-files etc.), `interim` data (e.g., files generated during curation), and `processed` data which is the cleaned csv-files with protein ids, sequence, target values, stratification label, and partition indicators. A snippet of the processed GH114 file can be seen here:
 
 | index | name     | sequence         | target_reg | target_class | part_0 | part_1 | part_2 |
 |-------|----------|------------------|------------|--------------|--------|--------|--------|
