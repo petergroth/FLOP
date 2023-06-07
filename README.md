@@ -1,6 +1,6 @@
 # FLOP: Tasks for Fitness Landscapes Of Protein wildtypes
 
-This is the official code repository for the paper _FLOP: Tasks for Fitness Landscapes Of Protein wildtypes_ by Groth et al. (2023) [LINK_TO_PAPER] which is currently under review at the NeurIPS 2023 Datasets and Benchmarks Track.
+This is the official code repository for the paper _FLOP: Tasks for Fitness Landscapes Of Protein wildtypes_ by Groth et al. (2023) [LINK_TO_PAPER] which is currently under review.
 
 ## Installation
 After cloning this repository, an environment can be built directly via
