@@ -36,9 +36,11 @@ For unsupervised Tranception scoring from https://github.com/OATML-Markslab/Tran
 For compositional/transitional representation generation from https://github.com/gadsbyfly/PyBioMed, clone and install the repository locally.
 
 ## Accessing data, representations, and models
-The datasets, computed representations, and trained EVE models are hosted at the _Electronic Research Data Archive_ (ERDA) by the University of Copenhagen.
-The data can be accessed at https://sid.erda.dk/cgi-sid/ls.py?share_id=HLXs3e9yCu, which allows for either downloading three zip-archives (data, models, representations) or individual files.
-The directory structure of the archives can be found at the bottom of this readme under **Project organization**.
+The curated data, i.e., the main benchmark data, can be found in the `data/processed/` directory in this repository. A description of what each datafile contains can be seen below.
+
+The full datasets, computed representations, and trained EVE models are hosted at the _Electronic Research Data Archive_ (ERDA) by the University of Copenhagen.
+This can be accessed at https://sid.erda.dk/cgi-sid/ls.py?share_id=HLXs3e9yCu, which allows for either downloading three tar-files (data, models, representations) or individual files.
+The directory structure of the tar-files can be found at the bottom of this readme under **Project organization**.
 
 **Datasets**: Includes `raw` data (e.g., original csv-files, pdb-files for all sequences, FASTA-files etc.), `interim` data (e.g., files generated during curation), and `processed` data which is the cleaned csv-files with protein ids, sequence, target values, stratification label, and partition indicators. A snippet of the processed GH114 file can be seen here:
 
