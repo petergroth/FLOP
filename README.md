@@ -51,7 +51,7 @@ The directory structure of the archives can be found at the bottom of this readm
 
 In the above, the first, second, and fourth proteins belong to the first cross-validation partition (1 in `part_0` column), while the third belongs to the second partition (1 in the `part_1` column). All datasets follow the above structure. The partition columns can easily be converted into either boolean masks for quick indexing or a single column with integer values specifying the partition.
 
-The structure for all proteins have been predicted using AlphaFold2 (Jumper et al. (2021), https://doi.org/10.1038/s41586-021-03819-2) and ColabFold (Mirdita et al. (2022), https://doi.org/10.1038/s41592-022-01488-1), using five recycling runs with early stopping at pLDDT of 90.0.
+The structures for all proteins have been predicted using AlphaFold2 (Jumper et al. (2021), https://doi.org/10.1038/s41586-021-03819-2) and ColabFold (Mirdita et al. (2022), https://doi.org/10.1038/s41592-022-01488-1), using five recycling runs with early stopping at pLDDT of 90.0.
 
 **Models**: Includes the trained EVE models for each dataset, where each dataset has three models in total (trained with different random seeds). Other pre-trained models, e.g., ESM-models, should be extracted from their original sources and placed in the `models` directory.
 
