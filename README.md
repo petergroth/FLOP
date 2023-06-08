@@ -17,6 +17,18 @@ _Caption_: Schematic over dataset splitting, representations, and cross validati
     C: Eight types of protein representations are computed. 
     D: Cross-validation using a random forest regressor is applied to obtain mean values and standard errors on the test partitions.
 
+### Dataset overview
+
+A summary of the curated datasets including their total sizes, partition sizes, between-partition sequence identity threshold (Split %ID), target value, median pair-wise sequence identity, and average sequence length can be seen in the table below.
+For comparison, in existing mutational fitness landscape datasets (i.e., for the local optimization phase), the median sequence identity is often close to 1.0 as all sequences are at pairwise Hamming distances of 1 (in the case of single mutants). 
+The low median sequence identity observed here highlights the diversity -- and difficulty -- of wildtype datasets. 
+
+|                | $N_{tot}$ | $N_A$ | $N_B$ | $N_C$ | Split %ID | Target   | Median %ID | Avg. length | Source |
+|----------------|-------|-----|-----|-----|------------|----------|------------|-------------|---------------|
+| GH114          | 53    | 20  | 18  | 17  | 0.55       | Activity | 0.46       | 268.8       |[Link](https://patentscope.wipo.int/search/en/detail.jsf?docId=WO2019228448)|
+| CM             | 855   | 341 | 259 | 255 | 0.40       | Activity | 0.40       | 91.1        |[Link](https://www.science.org/doi/full/10.1126/science.aba3304)|
+| PPAT           | 615   | 182 | 234 | 199 | 0.55       | Fitness  | 0.51       | 161.6       |[Link](https://www.science.org/doi/10.1126/science.aao5167) |
+
 ### Benchmark results
 
 <p align="center">
@@ -25,7 +37,6 @@ _Caption_: Schematic over dataset splitting, representations, and cross validati
 
 
 _Caption_: Average Spearman's rank correlation (and standard error) between predictions and targets over test partitions. Higher is better. $^\dagger$: Zero-shot correlations.
-
 
 ### Phylogenetic tree for PPAT dataset
 
