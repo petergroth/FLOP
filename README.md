@@ -2,6 +2,39 @@
 
 This is the official code repository for the paper _FLOP: Tasks for Fitness Landscapes Of Protein wildtypes_ by Groth et al. (2023) [LINK_TO_PAPER] which is currently under review.
 
+### Abstract
+Protein engineering has the potential to create optimized protein variants with improved properties and function. An initial step in the protein optimization process typically consists of a search among natural (wildtype) sequences to find the naturally occurring proteins with the most desirable properties. Promising candidates from this initial discovery phase then form the basis of the second step: a more local optimization procedure, exploring the space of variants separated from this candidate by a number of mutations. While considerable progress has been made on evaluating machine learning methods on single protein datasets, benchmarks of data-driven approaches for global fitness landscape exploration are still lacking. In this paper, we have carefully curated a representative benchmark dataset, which reflects industrially relevant scenarios for the initial wildtype discovery phase of protein engineering. We focus on exploration within a protein family, and investigate the downstream predictive power of various protein representation paradigms, i.e., protein language model-based representations, structure-based representations, and evolution-based representations. Our benchmark highlights the importance of coherent split strategies, and how we can be misled into overly optimistic estimates of the state of the field. 
+
+### Overview
+
+<p align="center">
+    <img src="reports/figures/FLOP_overview.png" width="900" />
+</p>
+
+_Caption_: Schematic over dataset splitting, representations, and cross validation process.
+    A: A dataset with sequences from a single protein family and corresponding assay values is curated. 
+    B: A stratified sequence identity splitting procedure generates partitions A, B, and C, which are (1) homologically different from each other, (2) contain similar number of sequences, and (3) match the full dataset's target distribution. 
+    C: Eight types of protein representations are computed. 
+    D: Cross-validation using a random forest regressor is applied to obtain mean values and standard errors on the test partitions.
+
+### Benchmark results
+
+<p align="center">
+    <img src="reports/figures/FLOP_benchmark_results_spearman.png" width="900" />
+</p>
+
+
+_Caption_: Average Spearman's rank correlation (and standard error) between predictions and targets over test partitions. Higher is better. $^\dagger$: Zero-shot correlations.
+
+
+### Phylogenetic tree for PPAT dataset
+
+<p align="center">
+    <img src="reports/figures/ppat_tree.png" width="900" />
+</p>
+
+_Caption_: The same segment of a phylogenetic tree for the PPAT dataset. Branch color corresponds to its CV partition, while the outermost ring shows the target values (black indicates high and white indicates low values). The segments highlight the diversity found in wildtype protein families. Left: entries are colored according to the prescribed dataset splitting procedure which allows learning across subfamilies (indicated by the mix of colors). Middle: entries are colored by a clustering approach leading to wide regions, disallowing learning across subfamilies. Right: entries are randomly assigned a color. While similar to the leftmost scheme, the random coloring allows near identical sequences to be placed in separate partitions leading to excessive data-leakage.
+
 ## Installation
 After cloning this repository, an environment can be built directly via
 
