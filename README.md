@@ -1,6 +1,6 @@
 # FLOP: Tasks for Fitness Landscapes Of Protein wildtypes
 
-This is the official code repository for the paper "FLOP: Tasks for Fitness Landscapes Of Protein wildtypes" (LINK TO PAPER).
+This is the official code repository for the paper _FLOP: Tasks for Fitness Landscapes Of Protein wildtypes_ by Groth et al. (2023) [LINK_TO_PAPER] which is currently under review.
 
 ## Installation
 After cloning this repository, an environment can be built directly via
@@ -35,12 +35,14 @@ For unsupervised Tranception scoring from https://github.com/OATML-Markslab/Tran
 #### PyBioMed
 For compositional/transitional representation generation from https://github.com/gadsbyfly/PyBioMed, clone and install the repository locally.
 
-## Downloading data
-The datasets, computed representations, and trained EVE models are hosted at the _Electronic Research Data Archive_ (ERDA) by the University of Copenhagen.
-The data can be accessed at https://sid.erda.dk/sharelink/ETd7gANO7C, which allows for either downloading three zip-archives (data, models, representations) or individual files.
-The directory structure of the archives can be found at the bottom of this readme under **Project organization**.
+## Accessing data, representations, and models
+The curated data, i.e., the main benchmark data, can be found in the `data/processed/` directory in this repository. A description of what each datafile contains can be seen below.
 
-**Datasets**: Includes `raw` data (e.g., original tsv/csv-files, pdb-files for all sequences, unaligned FASTA-files etc.), `interim` data (e.g., files generated during curation, generation of representations, etc.), and `processed` data which is simply the cleaned csv-files with protein ids, sequence, target values, stratification label, and partition indicators. A snippet of the processed GH114 file can be seen here:
+The full datasets, computed representations, and trained EVE models are hosted at the _Electronic Research Data Archive_ (ERDA) by the University of Copenhagen.
+This can be accessed at https://sid.erda.dk/cgi-sid/ls.py?share_id=HLXs3e9yCu, which allows for either downloading three tar-files (data, models, representations) or individual files.
+The directory structure of the tar-files can be found at the bottom of this readme under **Project organization**.
+
+**Datasets**: Includes `raw` data (e.g., original csv-files, pdb-files for all sequences, FASTA-files etc.), `interim` data (e.g., files generated during curation), and `processed` data which is the cleaned csv-files with protein ids, sequence, target values, stratification label, and partition indicators. A snippet of the processed GH114 file can be seen here:
 
 | index | name     | sequence         | target_reg | target_class | part_0 | part_1 | part_2 |
 |-------|----------|------------------|------------|--------------|--------|--------|--------|
@@ -49,11 +51,19 @@ The directory structure of the archives can be found at the bottom of this readm
 | 2     | SEQ_ID_18 | KPATAARATGLAD... | 0.60    | 1            | 0      | 1      | 0      |
 | 3     | SEQ_ID_21 | AAVTLPPTHAGFD... | 0.72   | 1            | 1      | 0      | 0      |
 
-In the above, the three proteins belong to the first cross-validation partition (1 in `part_0` column), while the fourth belongs to the second partition (1 in the `part_1` column). All datasets follow the above structure. The partition columns can easily be converted into either boolean masks for quick indexing or a single column with integer values specifying the partition.
+In the above, the first, second, and fourth proteins belong to the first cross-validation partition (1 in `part_0` column), while the third belongs to the second partition (1 in the `part_1` column). All datasets follow the above structure. The partition columns can easily be converted into either boolean masks for quick indexing or a single column with integer values specifying the partition.
+
+The structures for all proteins have been predicted using AlphaFold2 (Jumper et al. (2021), https://doi.org/10.1038/s41586-021-03819-2) and ColabFold (Mirdita et al. (2022), https://doi.org/10.1038/s41592-022-01488-1), using five recycling runs with early stopping at pLDDT of 90.0.
 
 **Models**: Includes the trained EVE models for each dataset, where each dataset has three models in total (trained with different random seeds). Other pre-trained models, e.g., ESM-models, should be extracted from their original sources and placed in the `models` directory.
 
 **Representations**: Includes all the generated partitions in their original formats.
+
+## Note on data
+The used datasets are curated versions of three publicly available datasets:
+- GH114 was extracted with permission from the inventors from the WO2019228448 patent which can be accessed at https://patentscope.wipo.int/search/en/detail.jsf?docId=WO2019228448 or alternatively at https://patents.google.com/patent/WO2019228448A1/en. 
+- CM was extracted from the supplementary materials of _An evolution-based model for designing chorismate mutase enzymes_ by Russ et al (2020), which can be accessed at https://www.science.org/doi/full/10.1126/science.aba3304.
+- PPAT was extracted from the supplementary materials of _Multiplexed gene synthesis in emulsions for exploring protein functional landscapes_ by Plesa et al. (2018), which can be accessed at https://www.science.org/doi/10.1126/science.aao5167.
 
 ## Reproducing the results
 
